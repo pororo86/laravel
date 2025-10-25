@@ -14,9 +14,9 @@
         <div class="spinner"></div>
     </div>
 </div>
-<body style="font-family: Arial, Helvetica, sans-serif;">
+<body class="d-flex flex-column min-vh-100" style="font-family: Arial, Helvetica, sans-serif;">
   @include('partials.header')
-  <main style="padding: 8em;">
+  <main class="flex-fill" style="padding: 8em;">
     @yield('content')
   </main>
   @include('partials.footer')
