@@ -9,6 +9,7 @@
       <li><a href="/abouts">Abouts</a></li>
       <li><a href="/contact">Contact</a></li>
       <li><a href="/mahasiswa">Mahasiswa</a></li>
+      <li><a href="/admin/mahasiswa">CRUD Mahasiswa</a></li>
       <li><a href="/jadwal">Jadwal Kuliah</a></li>
     </ul>
     <div class="search-bar">

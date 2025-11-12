@@ -8,8 +8,14 @@ class JadwalController extends Controller
 {
     public function index()
     {
-        $jadwals = Jadwal::paginate(10);
+        $jadwals = Jadwal::paginate(5);
         return view('jadwal', compact('jadwals'));
+    }
+
+    public function show($id)
+    {
+        $jadwals = Jadwal::findOrFail($id);
+        return view('jadwal-detail', compact('jadwals'));
     }
 
     public function search(Request $request)

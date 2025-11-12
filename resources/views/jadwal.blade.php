@@ -2,13 +2,52 @@
 @section('title','Jadwal Matkul')
 @section('content')
 <style>
-    th {
-        padding-top: 10px !important;
-        padding-bottom: 10px !important;
+    .jadwal-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1rem;
     }
-    td {
-        font-size: 0.8rem;
+
+    .jadwal-card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: all 0.25s ease;
+        cursor: pointer;
     }
+
+    .jadwal-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .jadwal-card img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+
+    .jadwal-card h5 {
+        font-size: 1rem;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+
+    .jadwal-card p {
+        font-size: 0.85rem;
+        margin-bottom: 4px;
+    }
+
+    /* Pagination style */
+    .pagination {
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    /* Modal Image */
     .image-modal {
         display: none;
         position: fixed;
@@ -17,85 +56,48 @@
         background: rgba(0,0,0,0.8);
         justify-content: center;
         align-items: center;
-        animation: fadeIn 0.3s ease;
     }
-    
     .image-modal img {
         max-width: 80%;
         max-height: 80%;
-        border-radius: 8px;
+        border-radius: 10px;
         box-shadow: 0 0 20px rgba(255,255,255,0.3);
     }
-    
     .close-btn {
         position: absolute;
-        top: 20px;
-        right: 35px;
-        color: #fff;
+        top: 15px;
+        right: 30px;
+        color: white;
         font-size: 40px;
-        font-weight: bold;
         cursor: pointer;
-        transition: 0.2s;
     }
-    
     .close-btn:hover {
         color: #ff4444;
     }
-    
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
 </style>
+
 <div class="container mt-4">
     <h2 class="text-center mb-4 fw-semibold" style="font-size: 1.6rem;">Daftar Jadwal Kuliah</h2>
 
-    <div class="table-responsive card shadow-sm h-100 border-0">
-        <table class="table table-hover align-middle mb-0">
-            <thead class="table-light text-center" style="font-size: 0.90rem; text-transform: uppercase; letter-spacing: 0.5px;">
-                <tr>
-                    <th>Kode MK</th>
-                    <th>Nama Mata Kuliah</th>
-                    <th>Dosen</th>
-                    <th>Kelas</th>
-                    <th>Hari</th>
-                    <th>Jam</th>
-                    <th>Tanggal Mulai</th>
-                    <th>Tanggal Akhir</th>
-                    <th>Kelompok</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($jadwals as $jadwal)
-                <tr 
-                onclick="showImage('{{ asset('buku/' . $jadwal->gambar) }}')">
-                    <td class="text-center">{{ $jadwal->kode_mk }}</td>
-                    <td>
-                        <div class="d-flex align-items-center">
-                            <img src="{{ asset('buku/'. $jadwal->gambar) }}"
-                                alt="{{ $jadwal->nama_mk }}"
-                                width="45"
-                                height="45"
-                                class="me-2 shadow-sm border"
-                                style="cursor: pointer;">
-                            <span class="fw-medium">{{ $jadwal->nama_mk }}</span>
-                        </div>
-                    </td>
-                    <td class="text-center">{{ $jadwal->dosen }}</td>
-                    <td class="text-center">{{ $jadwal->kelas }}</td>
-                    <td class="text-center">{{ $jadwal->hari }}</td>
-                    <td class="text-center">{{ $jadwal->jam }}</td>
-                    <td class="text-center">{{ \Carbon\Carbon::parse($jadwal->tanggal_mulai)->format('d F Y') }}</td>
-                    <td class="text-center">{{ \Carbon\Carbon::parse($jadwal->tanggal_akhir)->format('d F Y') }}</td>
-                    <td class="text-center">{{ $jadwal->kelompok }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+    {{-- Grid Jadwal --}}
+    <div class="jadwal-grid h-100">
+        @foreach($jadwals as $jadwal)
+        <div class="jadwal-card" onclick="showImage('{{ asset('buku/' . $jadwal->gambar) }}')">
+            <img src="{{ asset('buku/' . $jadwal->gambar) }}" alt="{{ $jadwal->nama_mk }}">
+            <h5 class="card-title text-center">{{ $jadwal->nama_mk }}</h5>
+            <a href="{{ route('jadwal.show', $jadwal->id) }}" class="btn btn-primary w-100">Detail</a>
+        </div>
+        @endforeach
+    </div>
+
+    {{-- Pagination --}}
+    <div class="d-flex justify-content-center mt-4">
+        {{ $jadwals->links('pagination::bootstrap-5') }}
     </div>
 </div>
-<!-- Popup Gambar (Overlay) -->
-<div id="imageModal" class="image-modal" onclick="closeModal()">
+
+{{-- Modal Gambar --}}
+{{-- <div id="imageModal" class="image-modal" onclick="closeModal()">
     <span class="close-btn">&times;</span>
     <img id="modalImage" class="modal-content">
 </div>
@@ -104,14 +106,11 @@
 function showImage(src) {
     const modal = document.getElementById("imageModal");
     const modalImg = document.getElementById("modalImage");
-
     modal.style.display = "flex";
     modalImg.src = src;
 }
-
 function closeModal() {
     document.getElementById("imageModal").style.display = "none";
 }
-</script>
-
+</script> --}}
 @endsection

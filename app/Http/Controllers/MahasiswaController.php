@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MahasiswaController extends Controller
 {
@@ -20,6 +21,90 @@ class MahasiswaController extends Controller
         $mahasiswas = Mahasiswa::findOrFail($id);
         return view('mahasiswa-detail', compact('mahasiswas'));
     }
+
+    public function adminIndex()
+    {
+        return view('admin.index');
+    }
+
+    public function getData()
+    {
+        $mahasiswas = Mahasiswa::all();
+        return response()->json(['data' => $mahasiswas]);
+    }
+
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'nim' => 'required|unique:mahasiswas,nim',
+            'nama' => 'required',
+            'prodi' => 'required',
+            'angkatan' => 'required',
+            'tgl_lahir' => 'required|date',
+            'no_hp' => 'required',
+            'gambar' => 'nullable|image|max:2048',
+        ]);
+
+        if ($request->hasFile('gambar')) {
+            $gambarPath = $request->file('gambar')->store('gambar', 'public');
+            $validatedData['gambar'] = basename($gambarPath);
+        } else {
+            $validatedData['gambar'] = null;
+        }
+
+        Mahasiswa::create($validatedData);
+
+        return response()->json(['success' => true]);
+    }
+
+    public function edit($id)
+    {
+        $mahasiswas = Mahasiswa::findOrFail($id);
+        return response()->json($mahasiswas);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $mahasiswas = Mahasiswa::findOrFail($id);
+
+        $validatedData = $request->validate([
+            'nim' => 'required|unique:mahasiswas,nim,'.$mahasiswas->id,
+            'nama' => 'required',
+            'prodi' => 'required',
+            'angkatan' => 'required',
+            'tgl_lahir' => 'required|date',
+            'no_hp' => 'required',
+            'gambar' => 'nullable|image|max:2048',
+        ]);
+
+        if ($request->hasFile('gambar')) {
+            // Hapus gambar lama jika ada
+            if($mahasiswas->gambar && Storage::disk('public')->exists('gambar/'.$mahasiswas->gambar)){
+                Storage::disk('public')->delete('gambar/'.$mahasiswas->gambar);
+            }
+            // Simpan gambar baru
+            $gambarPath = $request->file('gambar')->store('gambar', 'public');
+            $validatedData['gambar'] = basename($gambarPath);
+        }
+
+        $mahasiswas->update($validatedData);
+
+        return response()->json(['success' => true]);
+    }
+
+    public function destroy($id)
+    {
+        $mahasiswas = Mahasiswa::findOrFail($id);
+
+        if($mahasiswas->gambar && Storage::disk('public')->exists('gambar/'.$mahasiswas->gambar)){
+            Storage::disk('public')->delete('gambar/'.$mahasiswas->gambar);
+        }
+
+        $mahasiswas->delete();
+
+        return response()->json(['success' => true]);
+    }
+
 
     public function search(Request $request)
     {
