@@ -21,5 +21,27 @@
         </button>
       </form>
     </div>
+      <ul class="navbar-nav ms-auto">
+        @auth
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ Auth::user()->name }}
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <form action="/logout" method="POST">
+                @csrf
+                <button type="submit" class="dropdown-item">Logout</button>
+              </form>
+            </li>
+          </ul>
+          
+        </li>
+        @else
+        <li class="nav-item">
+          <a href="{{ route('login') }}" class="nav-link">Login</a>
+        </li>
+        @endauth
+      </ul>
   </div>
 </nav>
