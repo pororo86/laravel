@@ -39,6 +39,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/mahasiswa', [MahasiswaController::class, 'adminIndex'])->name('admin.mahasiswa.index');
     Route::get('/mahasiswa/data', [MahasiswaController::class, 'getData'])->name('admin.mahasiswa.data');
     Route::post('/mahasiswa/store', [MahasiswaController::class, 'store'])->name('admin.mahasiswa.store');
+    Route::get('/mahasiswa/pdf', [MahasiswaController::class, 'exportPdf'])->name('mahasiswa.all.pdf');
     Route::get('/mahasiswa/edit/{id}', [MahasiswaController::class, 'edit'])->name('admin.mahasiswa.edit');
     Route::post('/mahasiswa/update/{id}', [MahasiswaController::class, 'update'])->name('admin.mahasiswa.update');
     Route::delete('/mahasiswa/delete/{id}', [MahasiswaController::class, 'destroy'])->name('admin.mahasiswa.destroy');

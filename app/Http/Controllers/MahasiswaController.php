@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Dompdf\Dompdf;
+use Dompdf\Options; 
 
 class MahasiswaController extends Controller
 {
@@ -31,6 +33,26 @@ class MahasiswaController extends Controller
     {
         $mahasiswas = Mahasiswa::all();
         return response()->json(['data' => $mahasiswas]);
+    }
+
+    public function exportPdf()
+    {
+        $mahasiswas = Mahasiswa::all();
+        
+        $options = new Options();
+        $options->set('isRemoteEnabled', true);
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('chroot', realpath(base_path()));
+        $options->set('defaultFont', 'Arial');
+
+        $dompdf = new Dompdf($options);
+        $html = view('admin.report-pdf', compact('mahasiswas'))->render();
+
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->render();
+
+        return $dompdf->stream('data_mahasiswa_all.pdf');
     }
 
     public function store(Request $request)
