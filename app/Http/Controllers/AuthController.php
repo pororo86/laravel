@@ -25,6 +25,9 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+            $user = Auth::user();
+            $token = $user->createToken('auth_token')->plainTextToken;
+            session(['api_token' => $token]);
             return redirect()->intended('/admin/mahasiswa');
         }
 
@@ -63,9 +66,13 @@ class AuthController extends Controller
     // Logout
     public function logout(Request $request)
     {
+        if (Auth::check()) {
+            $user = Auth::user();
+            $user->tokens()->delete();
+        }
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/login')->with('success', 'Anda berhasil logout.');
+        return redirect('/');
     }
 }

@@ -4,12 +4,18 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
     public function index()
+    {
+        return view('admin.user');
+    }
+
+        public function getData()
     {
         $users = User::all();
         return response()->json([
@@ -62,27 +68,20 @@ class UserController extends Controller
         try {
             $user = User::findOrFail($id);
 
-            $validatedData = $request->validate([
-                'name' => 'sometimes|required|string|max:255',
-                'email' => 'sometimes|required|string|email|max:255|unique:users,email,' . $id,
-                'password' => 'sometimes|required|string|min:8',
-                'phone' => 'nullable',
-                'address' => 'nullable',
-                'role' => 'nullable',
-            ]);
+            $data = $request->all();
 
-            if (isset($validatedData['password'])) {
-                $validatedData['password'] = Hash::make($validatedData['password']);
+            if ($request->has('password')) {
+                $data['password'] = Hash::make($data['password']);
             }
 
-            $user->update($validatedData);
+            $user->update($data);
 
             return response()->json([
                 'status' => 'true',
                 'message' => 'User Berhasil Diperbarui',
                 'data' => $user], 
                 200);
-        } catch (\Exception $e) {
+        } catch (ModelNotFoundException $e) {
             return response()->json([
                 'status' => 'false',
                 'message' => 'User Tidak Ditemukan'], 

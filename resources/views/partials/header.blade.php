@@ -10,9 +10,10 @@
       <li><a href="/contact">Contact</a></li>
       <li><a href="/mahasiswa">Mahasiswa</a></li>
       <li><a href="/admin/mahasiswa">CRUD Mahasiswa</a></li>
+      <li><a href="/admin/users">CRUD User</a></li>
       <li><a href="/jadwal">Jadwal Kuliah</a></li>
     </ul>
-    <div class="search-bar">
+    {{-- <div class="search-bar">
       <form action="{{ route('mahasiswa.search') }}" method="GET" class="d-flex">
       <form action="{{ route('jadwal.search') }}" method="GET" class="d-flex">
         <input type="text" name="keyword" placeholder="apa yang dicari?" class="form-control" />
@@ -20,7 +21,7 @@
           <img src="{{ asset('bootstrap-5.3.5-dist/img/15-152459_search-icon-png.png') }}" alt="Cari" width="20">
         </button>
       </form>
-    </div>
+    </div> --}}
       <ul class="navbar-nav ms-auto">
         @auth
         <li class="nav-item dropdown">
@@ -45,3 +46,4 @@
       </ul>
   </div>
 </nav>
+</header>

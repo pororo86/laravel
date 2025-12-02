@@ -3,14 +3,14 @@
 @section('content')
 <div class="container">
     <h2 class="mb-4 text-center">Daftar Mahasiswa</h2>
-    @if(isset($keyword))
+    {{-- @if(isset($keyword))
         <div class="alert alert-info">
             Hasil pencarian untuk: <strong>{{ $keyword }}</strong>
         </div>
     @endif
     @if($mahasiswas->isEmpty())
         <p class="text-danger">Tidak ditemukan hasil untuk "<strong>{{ $keyword }}</strong>".</p>
-    @endif
+    @endif --}}
     <div class="row">
         @foreach ($mahasiswas as $mhs)
         <div class="col-md-4 mb-4">

@@ -14,6 +14,9 @@
   <script src="{{ asset('assets/datatables.min.js') }}"></script>
   <script src="{{ asset('assets/toastr.min.js') }}"></script>
   <script src="{{ asset('bootstrap-5.3.5-dist/js/bootstrap.bundle.min.js') }}"></script>
+  <script>
+    const API_TOKEN = "{{ session('api_token') }}";
+  </script>
 </head>
 <div id="loader">
     <div class="loader-content">

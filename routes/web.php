@@ -5,6 +5,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\api\UserController;
 use Illuminate\Support\Facades\Route;
 
 // === HALAMAN UMUM ===
@@ -43,4 +44,5 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/mahasiswa/edit/{id}', [MahasiswaController::class, 'edit'])->name('admin.mahasiswa.edit');
     Route::post('/mahasiswa/update/{id}', [MahasiswaController::class, 'update'])->name('admin.mahasiswa.update');
     Route::delete('/mahasiswa/delete/{id}', [MahasiswaController::class, 'destroy'])->name('admin.mahasiswa.destroy');
+    Route::get('/users', [UserController::class, 'index'])->name('admin.users');
 });
